@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author huzhiting
@@ -27,14 +27,14 @@ public class RegionController {
     private IRegionService regionService;
 
     @RequestMapping("/all")
-    public List<Region> getAllRegions(){
-        List<Region> regionList=regionService.getAllRegions();
+    public List<Region> getAllRegions() {
+        List<Region> regionList = regionService.getAllRegions();
         return regionList;
     }
 
     @RequestMapping("/search")
-    public List<Region> searchRegions(@RequestBody Region region){
-        List<Region> regionList=regionService.searchRegions(region);
+    public List<Region> searchRegions(@RequestBody Region region) {
+        List<Region> regionList = regionService.searchRegions(region);
         return regionList;
     }
 

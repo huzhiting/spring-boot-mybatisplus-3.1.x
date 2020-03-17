@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author huzhiting
@@ -31,15 +31,15 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
 
     @Override
     public List<Region> searchRegions(Region region) {
-        QueryWrapper queryWrapper=new QueryWrapper();
+        QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.setEntity(region);
         //1. 条件相等
-        queryWrapper.eq("city",region.getCity());
+        queryWrapper.eq("city", region.getCity());
         //2. 模糊查询
-        queryWrapper.like("city",region.getCity());
+        queryWrapper.like("city", region.getCity());
         //3. 条件不等于
-        queryWrapper.ge("city",region.getCity());
-        List<Region> regionList=regionMapper.selectList(queryWrapper);
+        queryWrapper.ge("city", region.getCity());
+        List<Region> regionList = regionMapper.selectList(queryWrapper);
         return regionList;
     }
 }
