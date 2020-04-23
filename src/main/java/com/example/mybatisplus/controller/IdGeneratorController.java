@@ -1,7 +1,9 @@
 package com.example.mybatisplus.controller;
 
 
+import com.baidu.fsg.uid.UidGenerator;
 import com.example.mybatisplus.service.IIdGeneratorService;
+import com.example.mybatisplus.service.IWorkerNodeService;
 import com.example.mybatisplus.util.LocalDateUtil;
 import com.xiaoju.uemc.tinyid.client.utils.TinyId;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,9 @@ public class IdGeneratorController {
 
     @Autowired
     private IIdGeneratorService idGeneratorService;
+
+    @Resource
+    private IWorkerNodeService workerNodeService;
 
     /**
      * 格式化，不足6位数，零补齐
@@ -75,4 +81,13 @@ public class IdGeneratorController {
         return ids;
     }
 
+    /**
+     * 集成百度uid-generator生成id
+     * @return
+     */
+    @GetMapping("/baidu/uid")
+    public long baiduUid(){
+        long uid = workerNodeService.genUid();
+        return uid;
+    }
 }
