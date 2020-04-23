@@ -3,6 +3,7 @@ package com.example.mybatisplus.controller;
 
 import com.example.mybatisplus.service.IIdGeneratorService;
 import com.example.mybatisplus.util.LocalDateUtil;
+import com.xiaoju.uemc.tinyid.client.utils.TinyId;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,26 @@ public class IdGeneratorController {
             idList.add(idStr.toString());
         });
         return StringUtils.join(idList,",");
+    }
+
+    /**
+     * 集成tinyid生成单个id
+     * @return
+     */
+    @GetMapping("/tinyid/simple")
+    public Long tinyid(){
+        Long id = TinyId.nextId("test");
+        return id;
+    }
+
+    /**
+     * 集成tinyid生成批量id
+     * @return
+     */
+    @GetMapping("/tinyid/batch")
+    public List<Long> tinyBatchId(){
+        List<Long> ids = TinyId.nextId("test", 10);
+        return ids;
     }
 
 }
