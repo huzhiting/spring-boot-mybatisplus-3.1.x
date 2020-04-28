@@ -2,6 +2,9 @@ package com.example.mybatisplus.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.Update;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.mybatisplus.entity.Article;
@@ -9,13 +12,16 @@ import com.example.mybatisplus.mapper.ArticleMapper;
 import com.example.mybatisplus.service.IArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.mybatisplus.vo.PageResult;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -77,5 +83,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         pageResult.setTotal(iPage.getTotal());
         System.out.println("文章总数：" + pageResult.getTotal());
         return pageResult;
+    }
+
+    /**
+     * update更新字段为null方法测试
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean updateArticleById(Integer id) {
+        Article article = Optional.ofNullable(articleMapper.selectById(id)).orElseThrow(RuntimeException::new);
+        LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(Article::getOfflineTime,null);
+        updateWrapper.set(Article::getContent,"try mybatis plus update null");
+        updateWrapper.set(Article::getPublishTime,LocalDateTime.now().plusHours(8));
+        updateWrapper.eq(Article::getId,article.getId());
+//        article.setContent("try mybatis plus update null again");
+//        article.setPublishTime(LocalDateTime.now().plusHours(8));
+//        article.setOfflineTime(null);
+        int i = articleMapper.update(article, updateWrapper);
+//        int i = articleMapper.updateById(article);
+        return i==1;
     }
 }

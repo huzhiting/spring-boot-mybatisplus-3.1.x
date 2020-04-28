@@ -25,4 +25,6 @@ public interface IArticleService extends IService<Article> {
     List<Article> searchMoreByMap(String code);
 
     PageResult<Article> searchArticlePage(Integer page, Integer size);
+
+    boolean updateArticleById(Integer id);
 }

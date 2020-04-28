@@ -90,5 +90,9 @@ public class ArticleController {
     }
 
 
-
+    @ResponseBody
+    @RequestMapping("/update/{id}")
+    public boolean updateArticleById(@PathVariable Integer id){
+        return iArticleService.updateArticleById(id);
+    }
 }

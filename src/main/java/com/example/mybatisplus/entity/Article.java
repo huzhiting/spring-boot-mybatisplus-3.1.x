@@ -3,6 +3,9 @@ package com.example.mybatisplus.entity;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -99,6 +102,7 @@ public class Article implements Serializable {
 
     /**
      * 下架时间
+     * @TableField(strategy = FieldStrategy.IGNORED)
      */
     private LocalDateTime offlineTime;
 
