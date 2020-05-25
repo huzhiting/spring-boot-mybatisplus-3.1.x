@@ -15,13 +15,12 @@ import com.example.mybatisplus.vo.PageResult;
 import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.util.resources.cldr.gl.LocaleNames_gl;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <p>
@@ -49,15 +48,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Article searchOne(Integer id) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Article::getId,id);
-        Article article = articleMapper.selectOne(queryWrapper);
-        return article;
+        queryWrapper.select(Article::getAuthor,Article::getCode).eq(Article::getId,id);
+        return articleMapper.selectOne(queryWrapper);
     }
 
     @Override
     public List<Article> searchMore(String keywords) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Article::getKeywords,keywords);
+        queryWrapper.eq(Article::getCatId,10);
+        queryWrapper.and(x->x.like(Article::getKeywords,keywords).or().like(Article::getTitle,keywords));
+        queryWrapper.select(Article::getAuthor,Article::getCode,Article::getChildTitle,Article::getTitle);
         List<Article> articles = articleMapper.selectList(queryWrapper);
         articles.forEach(x-> System.out.println("文章关键字：" + x.getKeywords() + ",文章标题：" + x.getTitle()));
         return articles;
@@ -104,5 +104,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         int i = articleMapper.update(article, updateWrapper);
 //        int i = articleMapper.updateById(article);
         return i==1;
+    }
+
+    @Override
+    public List<Article> searchByCondition() {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        //1.大于等于
+        //queryWrapper.ge(Article::getVisits,100);
+        //2.in
+//        Long[] catId = {10L,20L};
+//        List<Long> catList = Arrays.asList(catId);
+//        queryWrapper.in(Article::getCatId,catList);
+        //3.between
+        //queryWrapper.between(Article::getPublishTime, LocalDate.of(2020,5,1),LocalDate.now().plusMonths(1));
+        queryWrapper.eq(Article::getCatId,20);
+        //查询指定字段
+        queryWrapper.select(Article::getAuthor,Article::getCode,Article::getTitle,Article::getVisits,Article::getCreateTime);
+        //按访问量和创建时间排序
+        queryWrapper.orderByDesc(Article::getVisits).orderByAsc(Article::getCreateTime);
+        return articleMapper.selectList(queryWrapper);
     }
 }

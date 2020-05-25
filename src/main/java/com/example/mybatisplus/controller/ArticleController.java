@@ -95,4 +95,10 @@ public class ArticleController {
     public boolean updateArticleById(@PathVariable Integer id){
         return iArticleService.updateArticleById(id);
     }
+
+    @ResponseBody
+    @RequestMapping("/search")
+    public List<Article> searchByCondition(){
+        return iArticleService.searchByCondition();
+    }
 }

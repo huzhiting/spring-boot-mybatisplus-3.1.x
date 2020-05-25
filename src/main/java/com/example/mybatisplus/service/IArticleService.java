@@ -27,4 +27,6 @@ public interface IArticleService extends IService<Article> {
     PageResult<Article> searchArticlePage(Integer page, Integer size);
 
     boolean updateArticleById(Integer id);
+
+    List<Article> searchByCondition();
 }
